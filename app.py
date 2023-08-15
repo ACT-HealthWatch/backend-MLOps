@@ -1,15 +1,13 @@
 from flask import Flask, request, jsonify
+from src.processor import *
 
 app = Flask(__name__)
-
-# 모델 로드
-model = tf.keras.models.load_model('model.h5')
 
 @app.route('/predict', methods=['POST'])
 def predict():
     data = request.json
-    prediction = model.predict([data['input']])
-    return jsonify(prediction.tolist())
+    prediction = ProcessorFood.predict(data['image'])
+    return jsonify({'result': prediction})
 
 if __name__ == '__main__':
     app.run()
